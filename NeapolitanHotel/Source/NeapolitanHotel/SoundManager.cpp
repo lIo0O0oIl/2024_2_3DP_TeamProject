@@ -1,5 +1,5 @@
 #include "SoundManager.h"
-#include "Sound/SoundCue.h"
+#include "Sound/SoundBase.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
@@ -14,24 +14,26 @@ void USoundManager::BeginPlay()
     Super::BeginPlay();
 }
 
-// Function to play the sound effect based on the name
-void USoundManager::PlaySFX(FString Name)
+// Function to play the sound effect based on the name and location
+void USoundManager::PlaySFX(FString Name, FVector Location)
 {
-    // find to name
-    if (USoundCue** FoundSound = SoundMap.Find(Name))
+    // Find the sound by name
+    if (USoundBase** FoundSound = SoundMap.Find(Name))
     {
         if (FoundSound)
         {
-            UGameplayStatics::PlaySoundAtLocation(this, FoundSound, GetOwner()->GetActorLocation());
+            // Play the sound at the specified location
+            //UGameplayStatics::PlaySoundAtLocation(this, FoundSound, Location);
         }
         else
         {
-            // don't find
-            UE_LOG(LogTemp, Warning, TEXT("SoundCue for %s is null!"), Name);
+            // Sound was found in the map, but it's null
+            //UE_LOG(LogTemp, Warning, TEXT("SoundBase for %s is null!"), Name);
         }
     }
     else
     {
-        UE_LOG(LogTemp, Warning, TEXT("Sound %s not found in SoundMap!"), Name);
+        // Sound not found in the map
+        //UE_LOG(LogTemp, Warning, TEXT("Sound %s not found in SoundMap!"), Name);
     }
 }
