@@ -7,7 +7,7 @@
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class NEAPOLITANHOTEL_API USoundManager : public UActorComponent
 {
-GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
     // Sets default values for this component's properties
@@ -18,12 +18,11 @@ protected:
     virtual void BeginPlay() override;
 
 public:
-    // Function to play sound effects based on the given name
-    void PlaySFX(FString Name);
+    // Function to play sound effects based on the given name and location
+    void PlaySFX(FString Name, FVector Location);
 
 private:
-    // Map to hold the sound cues with their names
+    // Map to hold the sound bases with their names
     UPROPERTY(EditAnywhere)
-    TMap<FString, USoundCue*> SoundMap;
+    TMap<FString, USoundBase*> SoundMap;
 };
-
