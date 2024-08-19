@@ -66,6 +66,7 @@ void ANeapolitanHotelCharacter::SetupPlayerInputComponent(class UInputComponent*
 
 		//Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ANeapolitanHotelCharacter::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &ANeapolitanHotelCharacter::MoveEnd);
 
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ANeapolitanHotelCharacter::Look);
@@ -80,6 +81,7 @@ void ANeapolitanHotelCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
+	CurrentMovementVector = MovementVector;
 
 	if (Controller != nullptr)
 	{
@@ -87,6 +89,11 @@ void ANeapolitanHotelCharacter::Move(const FInputActionValue& Value)
 		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 		AddMovementInput(GetActorRightVector(), MovementVector.X);
 	}
+}
+
+void ANeapolitanHotelCharacter::MoveEnd(const FInputActionValue& Value)
+{
+	CurrentMovementVector = FVector2D(0, 0);
 }
 
 void ANeapolitanHotelCharacter::Look(const FInputActionValue& Value)
