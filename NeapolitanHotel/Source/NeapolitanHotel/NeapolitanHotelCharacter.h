@@ -39,7 +39,6 @@ class ANeapolitanHotelCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* MoveAction;
 
-	
 public:
 	ANeapolitanHotelCharacter();
 
@@ -56,6 +55,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
 	bool bHasRifle;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	FVector2D CurrentMovementVector;
+
 	/** Setter to set the bool */
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	void SetHasRifle(bool bNewHasRifle);
@@ -67,6 +69,8 @@ public:
 protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
+
+	void MoveEnd(const FInputActionValue& Value);
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
