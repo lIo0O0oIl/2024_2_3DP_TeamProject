@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "SoundManager.h"
 #include "NeapolitanHotelGameMode.generated.h"
 
 UCLASS(minimalapi)
@@ -13,6 +14,16 @@ class ANeapolitanHotelGameMode : public AGameModeBase
 
 public:
 	ANeapolitanHotelGameMode();
+
+	UFUNCTION(BlueprintCallable, Category = "Sound")
+	USoundManager* GetSoundManager() const { return SoundManager; }
+
+protected:
+	virtual void BeginPlay() override;
+
+private:
+	UPROPERTY()
+	USoundManager* SoundManager;
 };
 
 
