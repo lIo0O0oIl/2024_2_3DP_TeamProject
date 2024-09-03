@@ -95,6 +95,8 @@ void UTP_WeaponComponent::AttachWeapon(ANeapolitanHotelCharacter* TargetCharacte
 	}
 }
 
+
+
 void UTP_WeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	if (Character == nullptr)

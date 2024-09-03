@@ -7,7 +7,9 @@
 #include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundBase.h"
+#include "Components/AudioComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ANeapolitanHotelCharacter
@@ -35,12 +37,24 @@ ANeapolitanHotelCharacter::ANeapolitanHotelCharacter()
 	//Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
 
+	static ConstructorHelpers::FObjectFinder<USoundBase> FootstepSoundAsset(TEXT("/Game/Sound/Walk.Walk"));
+	if (FootstepSoundAsset.Succeeded())
+	{
+		FootstepSound = FootstepSoundAsset.Object;
+	}
+	FootstepAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("FootstepAudioComponent"));
+	FootstepAudioComponent->SetupAttachment(RootComponent);
 }
 
 void ANeapolitanHotelCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	if (FootstepSound)
+	{
+		FootstepAudioComponent->SetSound(FootstepSound);
+	}
 
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
@@ -50,7 +64,6 @@ void ANeapolitanHotelCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
-
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -88,12 +101,23 @@ void ANeapolitanHotelCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 		AddMovementInput(GetActorRightVector(), MovementVector.X);
+
+		if (!FootstepAudioComponent->IsPlaying() && (MovementVector.X != 0 || MovementVector.Y != 0))
+		{
+			FootstepAudioComponent->SetSound(FootstepSound);
+			FootstepAudioComponent->Play();
+		}
 	}
 }
 
 void ANeapolitanHotelCharacter::MoveEnd(const FInputActionValue& Value)
 {
 	CurrentMovementVector = FVector2D(0, 0);
+	
+	if (FootstepAudioComponent->IsPlaying())
+	{
+		FootstepAudioComponent->Stop();
+	}
 }
 
 void ANeapolitanHotelCharacter::Look(const FInputActionValue& Value)
@@ -106,6 +130,11 @@ void ANeapolitanHotelCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+
+		if (FootstepAudioComponent->IsPlaying())
+		{
+			FootstepAudioComponent->Stop();
+		}
 	}
 }
 
