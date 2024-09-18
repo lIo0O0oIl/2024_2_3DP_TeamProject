@@ -23,25 +23,12 @@ ANeapolitanHotelCharacter::ANeapolitanHotelCharacter()
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
 	FirstPersonCameraComponent->SetRelativeLocation(FVector(-10.f, 0.f, 60.f)); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
-
-	static ConstructorHelpers::FObjectFinder<USoundBase> FootstepSoundAsset(TEXT("/Game/Sound/Walk.Walk"));
-	if (FootstepSoundAsset.Succeeded())
-	{
-		FootstepSound = FootstepSoundAsset.Object;
-	}
-	FootstepAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("FootstepAudioComponent"));
-	FootstepAudioComponent->SetupAttachment(RootComponent);
 }
 
 void ANeapolitanHotelCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
-
-	if (FootstepSound)
-	{
-		FootstepAudioComponent->SetSound(FootstepSound);
-	}
 
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
@@ -60,19 +47,12 @@ void ANeapolitanHotelCharacter::SetupPlayerInputComponent(class UInputComponent*
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		//Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
 		//Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ANeapolitanHotelCharacter::Move);
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &ANeapolitanHotelCharacter::MoveEnd);
 
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ANeapolitanHotelCharacter::Look);
-
-		// Crouching
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 	}
 }
 
@@ -88,22 +68,12 @@ void ANeapolitanHotelCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(GetActorForwardVector(), CurrentMovementVector.Y);
 		AddMovementInput(GetActorRightVector(), CurrentMovementVector.X);
-
-		if (!FootstepAudioComponent->IsPlaying() && (CurrentMovementVector.X != 0 || CurrentMovementVector.Y != 0))
-		{
-			FootstepAudioComponent->Play();
-		}
 	}
 }
 
 void ANeapolitanHotelCharacter::MoveEnd(const FInputActionValue& Value)
 {
 	CurrentMovementVector = FVector2D(0, 0);
-	
-	if (FootstepAudioComponent->IsPlaying())
-	{
-		FootstepAudioComponent->Stop();
-	}
 }
 
 void ANeapolitanHotelCharacter::Look(const FInputActionValue& Value)
@@ -116,10 +86,5 @@ void ANeapolitanHotelCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
-
-		if (FootstepAudioComponent->IsPlaying())
-		{
-			FootstepAudioComponent->Stop();
-		}
 	}
 }
