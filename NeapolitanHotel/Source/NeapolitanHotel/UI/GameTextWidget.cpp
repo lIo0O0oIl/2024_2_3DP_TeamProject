@@ -13,7 +13,10 @@ void UGameTextWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	TextArray[CurrentTextIndex].ReplaceInline(TEXT("\\n"), TEXT("\n"));
+
 	GameText->SetText(FText::FromString(TextArray[CurrentTextIndex]));
+
 	CurrentTextIndex++;
 
 	CurrentTextTime = -1;
@@ -41,6 +44,8 @@ void UGameTextWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 				if (CurrentTextTime >= TextDelay + 1)
 				{
+					TextArray[CurrentTextIndex].ReplaceInline(TEXT("\\n"), TEXT("\n"));
+
 					GameText->SetText(FText::FromString(TextArray[CurrentTextIndex]));
 
 					Is_AnimStart = false;
