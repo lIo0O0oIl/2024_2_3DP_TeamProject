@@ -27,6 +27,10 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* TimeText;
 
+public:
+	UFUNCTION(BlueprintImplementableEvent, Category = "Custom")
+	void GameClear();
+
 private:
 	float Second = 0.0f;
 

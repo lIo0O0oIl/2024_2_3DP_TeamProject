@@ -23,7 +23,7 @@ void UGameTimeWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
 	Second += InDeltaTime;
-	if (Second >= 6.0f)
+	if (Second >= 1.5f)			// 분이 지나는 시간. 우리 게임 총 플레이 타임은 9분. 6으로 설정하면 36분됨.
 	{
 		UpdateTimeText();
 		Second = 0;
@@ -43,6 +43,10 @@ void UGameTimeWidget::UpdateTimeText()
 			if (Hours >= 13)
 			{
 				Hours = 1;
+			}
+			if (Hours == 5)			// 5시가 되면 게임 클리어
+			{
+				GameClear();
 			}
 		}
 
