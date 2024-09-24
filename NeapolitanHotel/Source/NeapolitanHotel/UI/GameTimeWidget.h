@@ -34,6 +34,9 @@ public:
 private:
 	float Second = 0.0f;
 
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	float NextMinute = 6.0f;
+
 protected:
 	UPROPERTY(EditAnywhere)
 	int Minutes = 0;

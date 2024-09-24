@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/SpotLightComponent.h"
+#include "Components/RectLightComponent.h"
 #include "Telephone.generated.h"
 
 UCLASS()
@@ -28,6 +29,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Custom")
 	void GameOver();
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Custom")
+	void GimmickClear();
+
 public:
 	UPROPERTY(EditAnywhere, Category = "Lights")
 	TArray<AActor*> SpotLightActors;
@@ -35,8 +39,14 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Lights")
 	TArray<USpotLightComponent*> SpotLights;
 
+	UPROPERTY(EditAnywhere, Category = "Lights")
+	TArray<AActor*> TurnOffLightActors;			// Rect Light Only
+
+	UPROPERTY(VisibleAnywhere, Category = "Lights")
+	TArray<URectLightComponent*> RectLights;
+
 private:
 	int CurrentLightIndex = 0;
 
-	bool IsEnd = false;
+	bool IsStart = false;
 };
