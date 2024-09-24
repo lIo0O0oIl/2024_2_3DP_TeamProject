@@ -32,6 +32,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void GameClearText();
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Custom")
+	void CustomBlueprintFunction();
+
 protected:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* GameText;

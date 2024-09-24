@@ -60,6 +60,8 @@ void UGameTextWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 			PlayAnimation(TextFade, 1.0f, 1, EUMGSequencePlayMode::Reverse, 1);
 			PlayAnimation(Fade, 0.0f, 1, EUMGSequencePlayMode::Forward, 1);
+
+			CustomBlueprintFunction();
 		}
 	}
 
@@ -86,10 +88,14 @@ void UGameTextWidget::StartTextSkip()
 
 	GameText->SetVisibility(ESlateVisibility::Hidden);
 	PlayAnimation(Fade, 0.0f, 1, EUMGSequencePlayMode::Forward, 1);
+
+	CustomBlueprintFunction();
 }
 
 void UGameTextWidget::GameOverText()
 {
+	GameText->SetVisibility(ESlateVisibility::Visible);
+
 	PlayAnimation(Fade, 0.0f, 1, EUMGSequencePlayMode::Reverse, 1);
 	PlayAnimation(TextFade, 1.0f, 1, EUMGSequencePlayMode::Forward, 1);
 
@@ -100,6 +106,8 @@ void UGameTextWidget::GameOverText()
 
 void UGameTextWidget::GameClearText()
 {
+	GameText->SetVisibility(ESlateVisibility::Visible);
+
 	PlayAnimation(Fade, 0.0f, 1, EUMGSequencePlayMode::Reverse, 1);
 	PlayAnimation(TextFade, 1.0f, 1, EUMGSequencePlayMode::Forward, 1);
 
